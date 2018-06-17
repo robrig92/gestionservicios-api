@@ -7,9 +7,14 @@ use Illuminate\Http\Request;
 
 class ClientesController extends Controller
 {
+	/**
+	 * Obtiene todos los registros.
+	 *
+	 * @return JsonResponse
+	 */
     public function index()
     {
     	$clientes = Cliente::all();
-		return $clientes;
+		return response()->json($clientes, 200);
     }
 }
