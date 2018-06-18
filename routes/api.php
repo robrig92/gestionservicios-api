@@ -14,3 +14,6 @@ use Illuminate\Http\Request;
 */
 
 Route::get('/cliente', 'ClientesController@index');
+Route::get('/cliente/{hashId}', 'ClientesController@show');
+Route::post('/cliente', 'ClientesController@store');
+Route::patch('/cliente/{hashId}', 'ClientesController@update');

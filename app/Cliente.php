@@ -10,7 +10,7 @@ class Cliente extends Model {
 	 * @var string
 	 */
 	protected $connection = 'mongodb';
-	
+
 	/**
 	 * Nombre real de la colección.
 	 *
@@ -25,6 +25,32 @@ class Cliente extends Model {
 	 */
 	protected $primaryKey = '_id';
 
+	/**
+	 * Deshabilita los timestamps por default de Eloquent.
+	 *
+	 * @var boolean
+	 */
+	protected $timestamps = fase;
+
+	/**
+	 * Los attributos que pueden ser modificables.
+	 *
+	 * @var array
+	 */
+	protected $fillable = [
+		'enabled',
+		'createdAt',
+		'updatedAt',
+		'hashId',
+		'usuarioCreador',
+		'nombreContacto',
+		'razonSocial',
+		'nombreComercial',
+		'direccion',
+		'telefono',
+		'email',
+		'password'
+	];
 }
 
 ?>
