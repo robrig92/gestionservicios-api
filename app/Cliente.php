@@ -30,7 +30,7 @@ class Cliente extends Model {
 	 *
 	 * @var boolean
 	 */
-	protected $timestamps = fase;
+	public $timestamps = false;
 
 	/**
 	 * Los attributos que pueden ser modificables.
