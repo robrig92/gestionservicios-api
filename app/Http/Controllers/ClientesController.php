@@ -89,21 +89,29 @@ class ClientesController extends Controller
 		]);
 
 		// Buscamos si existe el cliente.
-		$cliente = Cliente::where('hashIsh', $hashId)->get();
+		$cliente = Cliente::where('hashId', $hashId)
+			->get()
+			->first();
 
 		if (!$cliente) {
 			return response()->json([], 404);
 		}
 
 		// Actualizamos los datos del objeto.
+		empty($request->enabled) ? : $cliente->enabled = $request->enabled;
+		$cliente->updatedAt = $request->updatedAt;
+		empty($cliente->nombreContacto) ?
+			: $cliente->nombreContacto = $request->nombreContacto;
+		$cliente->razonSocial = $request->razonSocial;
+		$cliente->nombreComercial = $request->nombreComercial;
+		$cliente->direccion = $request->direccion;
+		$cliente->telefono = $request->telefono;
+		empty($cliente->email) ? : $cliente->email = $request->email;
 		empty($request->password) ? : $cliente->password = $request->password;
 
 		// Actualizamos el registro.
-		Cliente::where('hashId', $hashId)
-			->update($request->all());
+		$cliente->save();
 
-		$cliente = Cliente::find('hashId', $hashId)->get();
-
-		return response()->json($cliente[0], 200);
+		return response()->json($cliente, 200);
 	}
 }
