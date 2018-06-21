@@ -114,4 +114,25 @@ class ClientesController extends Controller
 
 		return response()->json($cliente, 200);
 	}
+
+	/**
+	 * Elimina un registro.
+	 *
+	 * @param  string $hashId
+	 * @return Illuminate/Http/JsonResponse
+	 */
+	public function destroy(string $hashId)
+	{
+		$cliente = Cliente::where($hashId)
+			->get()
+			->first();
+
+		if (!$cliente) {
+			return response()->json(null, 404);
+		}
+
+		$cliente->delete();
+
+		return response()->json($cliente, 200);
+	}
 }
