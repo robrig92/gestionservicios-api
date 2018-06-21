@@ -123,6 +123,7 @@ class ClientesController extends Controller
 	 */
 	public function destroy(string $hashId)
 	{
+		// Comprobamos que existe.
 		$cliente = Cliente::where($hashId)
 			->get()
 			->first();
@@ -131,6 +132,7 @@ class ClientesController extends Controller
 			return response()->json(null, 404);
 		}
 
+		// Eliminamos físicamente el registro.
 		$cliente->delete();
 
 		return response()->json($cliente, 200);
