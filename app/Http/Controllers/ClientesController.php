@@ -57,13 +57,28 @@ class ClientesController extends Controller
 			'password' => 'string|required'
 		]);
 
+		// Obtenemos los argumentos a persistir.
+		$args = $request->only([
+			'enabled',
+			'createdAt',
+			'updatedAt',
+			'usuarioCreador',
+			'nombreContacto',
+			'razonSocial',
+			'nombreComercial',
+			'direccion',
+			'telefono',
+			'email',
+			'password'
+		]);
+
 		// Encriptando el password.
-		$request->password = bcrypt($request->password);
-		$fields = $request->all();
+		$args->password = bcrypt($args->password);
+		$fields = $args->all();
 		$fields['hashId'] = md5(now());
 
-		// Insertando el registro.
-		$cliente = Cliente::create($request->all());
+		// Persistiendo el registro.
+		$cliente = Cliente::create($args);
 
 		return response()->json($cliente, 201);
 	}

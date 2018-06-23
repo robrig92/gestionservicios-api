@@ -51,6 +51,15 @@ class Cliente extends Model {
 		'email',
 		'password'
 	];
+
+	/**
+	 * Attributos invisibles para la serialización.
+	 *
+	 * @var array
+	 */
+	protected $hidden = [
+		'password'
+	];
 }
 
 ?>
