@@ -110,6 +110,7 @@ class EstatusController extends Controller
 
 		// Modificamos el objeto.
 		$estatus->enabled = false;
+		$estatus->updatedAt = date('Y-m-d H:i:s');
 
 		// Borrado lógico.
 		$estatus->save();

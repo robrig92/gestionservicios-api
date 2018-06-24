@@ -26,3 +26,8 @@ Route::delete('/cliente/{hashId}', 'ClientesController@destroy');
 Route::resource('estatus', 'EstatusController', ['except' => [
 	'create', 'edit'
 ]]);
+
+// Rutas para /marca
+Route::resource('marca', 'MarcasController', ['except' => [
+	'create', 'edit'
+]]);
