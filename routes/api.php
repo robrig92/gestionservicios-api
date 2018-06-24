@@ -31,3 +31,8 @@ Route::resource('estatus', 'EstatusController', ['except' => [
 Route::resource('marca', 'MarcasController', ['except' => [
 	'create', 'edit'
 ]]);
+
+// Rutas para /notificacion
+Route::resource('notificacion', 'NotificacionesController', ['except' => [
+	'create', 'edit'
+]]);
