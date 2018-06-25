@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Cliente;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\Paginator;
 
 class ClientesController extends Controller
 {
@@ -16,6 +17,20 @@ class ClientesController extends Controller
     {
     	$clientes = Cliente::all();
 		return response()->json($clientes, 200);
+    }
+
+     /**
+	 * Obtiene contenido del paginador de registros.
+	 *
+	 * @return Illuminate\Http\JsonResponse
+	 */
+    public function parcial(int $pagina)
+    {
+    	Paginator::currentPageResolver(function() use ($pagina) {
+		    return $pagina;
+		});
+    	$paginadorClientes = Cliente::paginate(15);
+		return response()->json($paginadorClientes, 200);
     }
 
 	/**
