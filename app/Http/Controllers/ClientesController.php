@@ -60,20 +60,18 @@ class ClientesController extends Controller
 	{
 		$request->validate([
 			'enabled' => 'boolean',
-			'createdAt' => 'required|date',
-			'updatedAt' => 'date',
 			'usuarioCreador' => 'required|string',
 			'nombreContacto' => 'required|string',
-			'razonSocial' => 'string',
-			'nombreComercial' => 'string',
+			'razonSocial' => 'string|nullable',
+			'nombreComercial' => 'string|nullable',
 			'calle' => 'required|string',
-			'numInterior' => 'string',
-			'numExterior' => 'string',
-			'colonia' => 'string',
-			'codigoPostal' => 'string|max:5',
+			'numInterior' => 'string|nullable',
+			'numExterior' => 'string|nullable',
+			'colonia' => 'string|nullable',
+			'codigoPostal' => 'string|max:5|nullable',
 			'municipio' => 'required|string',
 			'estado' => 'required|string',
-			'telefono' => 'string|max:10',
+			'telefono' => 'string|max:10|nullable',
 			'email' => 'email|required',
 			'password' => 'string|required'
 		]);
@@ -81,8 +79,6 @@ class ClientesController extends Controller
 		// Obtenemos los argumentos a persistir.
 		$args = $request->only([
 			'enabled',
-			'createdAt',
-			'updatedAt',
 			'usuarioCreador',
 			'nombreContacto',
 			'razonSocial',
@@ -100,9 +96,13 @@ class ClientesController extends Controller
 		]);
 
 		// Encriptando el password.
-		$args->password = bcrypt($args->password);
-		$fields = $args->all();
-		$fields['hashId'] = md5(now());
+		$args['password'] = bcrypt($args['password']);
+
+		// Completando los calculados.
+		$args['hashId'] = md5(now());
+
+		$args['createdAt'] = date('Y-d-m H:i:s');
+		$args['updatedAt'] = null;
 
 		// Persistiendo el registro.
 		$cliente = Cliente::create($args);
@@ -120,18 +120,17 @@ class ClientesController extends Controller
 	{
 		$request->validate([
 			'enabled' => 'boolean',
-			'updatedAt' => 'required|date',
 			'nombreContacto' => 'required|string',
-			'razonSocial' => 'string',
-			'nombreComercial' => 'string',
+			'razonSocial' => 'string|nullable',
+			'nombreComercial' => 'string|nullable',
 			'calle' => 'string',
-			'numInterior' => 'string',
-			'numExterior' => 'string',
-			'colonia' => 'string',
-			'codigoPostal' => 'string|max:5',
+			'numInterior' => 'string|nullable',
+			'numExterior' => 'string|nullable',
+			'colonia' => 'string|nullable',
+			'codigoPostal' => 'string|max:5|nullable',
 			'municipio' => 'required|string',
 			'estado' => 'required|string',
-			'telefono' => 'string|max:10',
+			'telefono' => 'string|max:10|nullable',
 			'email' => 'email|required',
 			'password' => 'string'
 		]);
@@ -166,6 +165,9 @@ class ClientesController extends Controller
 		$cliente->telefono = $request->telefono;
 		empty($cliente->email) ? : $cliente->email = $request->email;
 		empty($request->password) ? : $cliente->password = $request->password;
+
+		// Campos calculados.
+		$cliente->updatedAt = date('Y-m-d H:i:s');
 
 		// Actualizamos el registro.
 		$cliente->save();
