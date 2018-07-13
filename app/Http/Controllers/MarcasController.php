@@ -29,8 +29,6 @@ class MarcasController extends Controller
     {
         $request->validate([
 			'enabled' => 'required|boolean',
-			'createdAt' => 'required|date',
-			'updatedAt' => 'date',
 			'usuarioCreador' => 'required|string',
 			'marca' => 'required|string'
 		]);
@@ -38,11 +36,13 @@ class MarcasController extends Controller
 		// Obtenemos los argumentos del request.
 		$args = $request->only([
 			'enabled',
-			'createdAt',
-			'updatedAt',
 			'usuarioCreador',
 			'marca'
 		]);
+
+		// Completando campos calculados.
+		$args['createdAt'] = date('Y-m-d H:i:s');
+		$args['updatedAt'] = null;
 
 		// Persistimos en el almacenamiento.
 		$marca = Marca::create($args);
@@ -79,7 +79,6 @@ class MarcasController extends Controller
     {
 		$request->validate([
 			'enabled' => 'required|boolean',
-			'updatedAt' => 'required|date',
 			'marca' => 'required|string'
 		]);
 
@@ -90,6 +89,9 @@ class MarcasController extends Controller
 		$marca->enabled = $request->enabled;
 		$marca->updatedAt = $request->updatedAt;
 		$marca->marca = $request->marca;
+
+		// Completando campos calculados.
+		$marca->updatedAt = date('Y-m-d H:i:s');
 
 		// Persistimos los cambios en el almacenamiento.
 		$marca->save();
