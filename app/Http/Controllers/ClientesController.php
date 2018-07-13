@@ -66,7 +66,13 @@ class ClientesController extends Controller
 			'nombreContacto' => 'required|string',
 			'razonSocial' => 'string',
 			'nombreComercial' => 'string',
-			'direccion' => 'string',
+			'calle' => 'required|string',
+			'numInterior' => 'string',
+			'numExterior' => 'string',
+			'colonia' => 'string',
+			'codigoPostal' => 'string|max:5',
+			'municipio' => 'required|string',
+			'estado' => 'required|string',
 			'telefono' => 'string|max:10',
 			'email' => 'email|required',
 			'password' => 'string|required'
@@ -81,7 +87,13 @@ class ClientesController extends Controller
 			'nombreContacto',
 			'razonSocial',
 			'nombreComercial',
-			'direccion',
+			'calle',
+			'numInterior',
+			'numExterior',
+			'colonia',
+			'codigoPostal',
+			'municipio',
+			'estado',
 			'telefono',
 			'email',
 			'password'
@@ -112,7 +124,13 @@ class ClientesController extends Controller
 			'nombreContacto' => 'required|string',
 			'razonSocial' => 'string',
 			'nombreComercial' => 'string',
-			'direccion' => 'string',
+			'calle' => 'string',
+			'numInterior' => 'string',
+			'numExterior' => 'string',
+			'colonia' => 'string',
+			'codigoPostal' => 'string|max:5',
+			'municipio' => 'required|string',
+			'estado' => 'required|string',
 			'telefono' => 'string|max:10',
 			'email' => 'email|required',
 			'password' => 'string'
@@ -134,7 +152,17 @@ class ClientesController extends Controller
 			: $cliente->nombreContacto = $request->nombreContacto;
 		$cliente->razonSocial = $request->razonSocial;
 		$cliente->nombreComercial = $request->nombreComercial;
-		$cliente->direccion = $request->direccion;
+		$cliente->calle = $request->calle;
+		empty($request->numInterior) ?
+			: $cliente->numInterior = $request->numInterior;
+		empty($request->numExterior) ?
+			: $cliente->numExterior = $request->numExterior;
+		empty($request->colonia) ?
+			: $cliente->colonia = $request->colonia;
+		empty($request->codigoPostal) ?
+			: $cliente->codigoPostal = $request->codigoPostal;
+		$cliente->municipio = $request->municipio;
+		$cliente->estado = $request->estado;
 		$cliente->telefono = $request->telefono;
 		empty($cliente->email) ? : $cliente->email = $request->email;
 		empty($request->password) ? : $cliente->password = $request->password;
