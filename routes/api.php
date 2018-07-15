@@ -23,6 +23,12 @@ Route::post('/cliente', 'ClientesController@store');
 Route::patch('/cliente/{hashId}', 'ClientesController@update');
 Route::delete('/cliente/{hashId}', 'ClientesController@destroy');
 
+// Rutas para /usuario
+Route::get('/usuario', 'UsuariosController@index');
+Route::get('/usuario/{hashId}', 'UsuariosController@show');
+Route::get('/usuario/parcial/{pagina}', 'UsuariosController@parcial');
+Route::delete('/usuario/{hashId}', 'UsuariosController@destroy');
+
 // Rutas para /estatus
 Route::resource('estatus', 'EstatusController', ['except' => [
 	'create', 'edit'
