@@ -59,7 +59,6 @@ class ClientesController extends Controller
 	public function store(Request $request)
 	{
 		$request->validate([
-			'enabled' => 'boolean',
 			'usuarioCreador' => 'required|string',
 			'nombreContacto' => 'required|string',
 			'razonSocial' => 'string|nullable',
@@ -73,12 +72,12 @@ class ClientesController extends Controller
 			'estado' => 'required|string',
 			'telefono' => 'string|max:10|nullable',
 			'email' => 'email|required',
-			'password' => 'string|required'
+			'password' => 'string|required',
+			'rfc' => 'string|max:13|min:12|nullable'
 		]);
 
 		// Obtenemos los argumentos a persistir.
 		$args = $request->only([
-			'enabled',
 			'usuarioCreador',
 			'nombreContacto',
 			'razonSocial',
@@ -92,15 +91,16 @@ class ClientesController extends Controller
 			'estado',
 			'telefono',
 			'email',
-			'password'
+			'password',
+			'rfc'
 		]);
 
 		// Encriptando el password.
 		$args['password'] = bcrypt($args['password']);
 
 		// Completando los calculados.
+		$args['enabled'] = true;
 		$args['hashId'] = md5(now());
-
 		$args['createdAt'] = date('Y-d-m H:i:s');
 		$args['updatedAt'] = null;
 
@@ -119,7 +119,7 @@ class ClientesController extends Controller
 	public function update(Request $request, string $hashId)
 	{
 		$request->validate([
-			'enabled' => 'boolean',
+			'enabled' => 'boolean|nullable',
 			'nombreContacto' => 'required|string',
 			'razonSocial' => 'string|nullable',
 			'nombreComercial' => 'string|nullable',
@@ -132,7 +132,8 @@ class ClientesController extends Controller
 			'estado' => 'required|string',
 			'telefono' => 'string|max:10|nullable',
 			'email' => 'email|required',
-			'password' => 'string'
+			'password' => 'string',
+			'rfc' => 'string|nullable|max:13|min:12'
 		]);
 
 		// Buscamos si existe el cliente.
@@ -144,27 +145,30 @@ class ClientesController extends Controller
 			return response()->json([], 404);
 		}
 
-		// Actualizamos los datos del objeto.
-		empty($request->enabled) ? : $cliente->enabled = $request->enabled;
-		$cliente->updatedAt = $request->updatedAt;
-		empty($cliente->nombreContacto) ?
-			: $cliente->nombreContacto = $request->nombreContacto;
+		// Actualizamos los datos del objeto campos requeridos.
 		$cliente->razonSocial = $request->razonSocial;
 		$cliente->nombreComercial = $request->nombreComercial;
 		$cliente->calle = $request->calle;
-		empty($request->numInterior) ?
-			: $cliente->numInterior = $request->numInterior;
-		empty($request->numExterior) ?
-			: $cliente->numExterior = $request->numExterior;
-		empty($request->colonia) ?
-			: $cliente->colonia = $request->colonia;
-		empty($request->codigoPostal) ?
-			: $cliente->codigoPostal = $request->codigoPostal;
 		$cliente->municipio = $request->municipio;
 		$cliente->estado = $request->estado;
 		$cliente->telefono = $request->telefono;
+
+		// Campos opcionales.
+		empty($request->enabled) ? : $cliente->enabled = $request->enabled;
+		$cliente->updatedAt = $request->updatedAt;
+		empty($cliente->nombreContacto) ?
+		: $cliente->nombreContacto = $request->nombreContacto;
 		empty($cliente->email) ? : $cliente->email = $request->email;
 		empty($request->password) ? : $cliente->password = $request->password;
+		empty($request->rfc) ? : $cliente->rfc = $request->rfc;
+		empty($request->numInterior) ?
+		: $cliente->numInterior = $request->numInterior;
+		empty($request->numExterior) ?
+		: $cliente->numExterior = $request->numExterior;
+		empty($request->colonia) ?
+		: $cliente->colonia = $request->colonia;
+		empty($request->codigoPostal) ?
+		: $cliente->codigoPostal = $request->codigoPostal;
 
 		// Campos calculados.
 		$cliente->updatedAt = date('Y-m-d H:i:s');

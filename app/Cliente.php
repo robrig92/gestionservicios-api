@@ -55,7 +55,8 @@ class Cliente extends Model {
 		'estado',
 		'telefono',
 		'email',
-		'password'
+		'password',
+		'rfc'
 	];
 
 	/**
