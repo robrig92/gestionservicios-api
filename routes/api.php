@@ -43,3 +43,7 @@ Route::resource('marca', 'MarcasController', ['except' => [
 Route::resource('notificacion', 'NotificacionesController', ['except' => [
 	'create', 'edit'
 ]]);
+
+Route::resource('permiso', 'PermisosController', ['except' => [
+	'create', 'edit'
+]]);
