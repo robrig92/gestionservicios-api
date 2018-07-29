@@ -44,6 +44,12 @@ Route::resource('notificacion', 'NotificacionesController', ['except' => [
 	'create', 'edit'
 ]]);
 
+// Rutas para /permiso
 Route::resource('permiso', 'PermisosController', ['except' => [
+	'create', 'edit'
+]]);
+
+// Rutas para prioridad
+Route::resource('prioridad', 'PrioridadController', ['except' => [
 	'create', 'edit'
 ]]);
