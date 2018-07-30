@@ -53,3 +53,8 @@ Route::resource('permiso', 'PermisosController', ['except' => [
 Route::resource('prioridad', 'PrioridadController', ['except' => [
 	'create', 'edit'
 ]]);
+
+// Rutas para rol
+Route::resource('rol', 'RolesController', ['except' => [
+	'create', 'edit'
+]]);

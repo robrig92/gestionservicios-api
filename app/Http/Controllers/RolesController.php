@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Permiso;
+use App\Rol;
 use Illuminate\Http\Request;
 
-class PermisosController extends Controller
+class RolesController extends Controller
 {
-    /**
+	/**
      * Recupera todos los recursos habilitados del almacenamiento.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $permisos = Permiso::enabled()->get();
+        $roles = Rol::enabled()->get();
 
-		return response()->json($permisos, 200);
+		return response()->json($roles, 200);
     }
 
     /**
@@ -28,94 +28,98 @@ class PermisosController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-			'descripcion' => 'string|required',
-			'permiso' => 'string|required'
+			'nombre' => 'string|required',
+			'usuarioCreador' => 'string|required'
 		]);
 
 		// Obteniendo los parámetros requeridos.
 		$args = $request->only([
-			'descripcion',
-			'permiso'
+			'nombre',
+			'usuarioCreador'
 		]);
 
 		// Completando los calculados.
 		$args['enabled'] = true;
+		$args['createdAt'] = date('Y-m-d H:i:s');
+		$args['updatedAt'] = null;
+		$args['hashId'] = $this->createHashId();
 
 		// Intentamos persistir en almacenamiento.
-		$permiso = Permiso::create($args);
+		$rol = Rol::create($args);
 
-		return response()->json($permiso, 201);
+		return response()->json($rol, 201);
     }
 
     /**
      * Obtiene el recurso especificado.
      *
-     * @param  string  $id
+     * @param  string  $hashId
      * @return \Illuminate\Http\Response
      */
-    public function show(string $id)
+    public function show(string $hashId)
     {
-        $permiso = Permiso::find($id);
+        $rol = Rol::withHashId($hashId)->first();
 
 		// Registro no encontrado.
-		if (!$permiso) {
+		if (!$rol) {
 			return response()->json(null, 404);
 		}
 
-		return response()->json($permiso, 200);
+		return response()->json($rol, 200);
     }
 
     /**
      * Actualizamos el recurso especificado en el almacenamiento.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  string  $id
+     * @param  string  $hashId
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $hashId)
     {
         $request->validate([
 			'enabled' => 'boolean|nullable',
-			'descripcion' => 'string|required',
-			'permiso' => 'string|required'
+			'nombre' => 'string|required'
 		]);
 
 		// Tratamos de obtener el recurso.
-		$permiso = Permiso::find($id);
+		$rol = Rol::withHashId($hashId)->first();
 
 		// Si no se encuentra el recurso.
-		if (!$permiso) {
+		if (!$rol) {
 			return response()->json(null, 404);
 		}
 
 		// Actualizamos el objeto.
-		$permiso->descripcion = $request->descripcion;
-		$permiso->permiso = $request->permiso;
-		(!isset($request->enabled)) ? : $permiso->enabled = $request->enabled;
+		$rol->nombre = $request->nombre;
+		(!isset($request->enabled)) ? : $rol->enabled = $request->enabled;
+
+		// Seteando argumenos calculados.
+		$rol->updated = date('Y-m-d H:i:s');
 
 		// Persistimos los cambios.
-		$permiso->save();
+		$rol->save();
 
-		return response()->json($permiso, 200);
+		return response()->json($rol, 200);
     }
 
     /**
      * Elimina un recurso del almacenamiento de manera lógica.
      *
-     * @param  string  $id
+     * @param  string $hashId
      * @return \Illuminate\Http\Response
      */
-    public function destroy(string $id)
+    public function destroy(string $hashId)
     {
         // Buscamos el registro.
-        $permiso = Permiso::find($id);
+        $rol = Rol::withHashId($hashId)->first();
 
 		// Modificamos el objeto.
-		$permiso->enabled = false;
+		$rol->enabled = false;
 
 		// Persistimos la información.
-		$permiso->save();
+		$rol->save();
 
-		return response()->json($permiso, 200);
+		return response()->json($rol, 200);
     }
 }
