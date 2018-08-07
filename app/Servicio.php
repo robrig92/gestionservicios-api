@@ -4,7 +4,7 @@ namespace App;
 
 use Jenssegers\Mongodb\Eloquent\Model;
 
-class Prioridad extends Model
+class Servicio extends Model
 {
 	/**
 	 * Tipo de la conexión.
@@ -18,7 +18,7 @@ class Prioridad extends Model
 	 *
 	 * @var string
 	*/
-	protected $collection = 'prioridad';
+	protected $collection = 'servicio';
 
 	/**
 	 * Llave primaria.
@@ -40,8 +40,14 @@ class Prioridad extends Model
 	*/
 	protected $fillable = [
 		'enabled',
+		'createdAt',
+		'updatedAt',
 		'hashId',
-		'nombre'
+		'usuarioCreador',
+		'descripcion',
+		'precio',
+		'observaciones',
+		'tiempoPromedio'
 	];
 
 	/**

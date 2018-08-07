@@ -59,9 +59,10 @@ class Rol extends Model
 	}
 
 	/**
-	 * Limita el resultado a registros enabled.
+	 * Limita el resultado a registros con el hashId.
 	 *
 	 * @param \Illuminate\Database\Eloquent\Builder $query
+	 * @param string $hashId
 	 * @return \Illuminate\Database\Eloquent\Builder
 	 */
 	public function scopeWithHashId($query, $hashId)
